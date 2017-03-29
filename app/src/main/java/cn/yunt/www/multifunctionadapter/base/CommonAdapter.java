@@ -26,7 +26,7 @@ public abstract class CommonAdapter<T> extends MultiItemTypeAdapter<T> {
 
             @Override
             public boolean isForViewType(T t, int position) {
-                return false;
+                return true;
             }
 
             @Override

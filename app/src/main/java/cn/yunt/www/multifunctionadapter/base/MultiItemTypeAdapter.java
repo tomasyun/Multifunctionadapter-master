@@ -32,31 +32,38 @@ public class MultiItemTypeAdapter<T> extends RecyclerView.Adapter<ViewHolder> {
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         ItemViewDelegate itemViewDelegate = itemViewDelegateManager.getItemViewDelegate(viewType);
         int layoutId = itemViewDelegate.getItemViewLayoutId();
-        ViewHolder viewHolder=ViewHolder.createViewHolder(mContext,parent,layoutId);
-        onViewHolderCreated(viewHolder,viewHolder.getConvertView());
-        return null;
+        ViewHolder viewHolder = ViewHolder.createViewHolder(mContext, parent, layoutId);
+        onViewHolderCreated(viewHolder, viewHolder.getConvertView());
+        setListener(parent, viewHolder, viewType);
+        return viewHolder;
     }
 
     public void onViewHolderCreated(ViewHolder holder, View itemView) {
 
     }
+
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-
+        convert(holder, mList.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return mList.size();
     }
 
     protected boolean useItemViewDelegateManager() {
         return itemViewDelegateManager.getItemViewDelegateCount() > 0;
     }
 
+    public void convert(ViewHolder holder, T t) {
+        itemViewDelegateManager.convert(holder, t, holder.getAdapterPosition());
+    }
+
     protected boolean isEnabled(int viewType) {
         return true;
     }
+
     public MultiItemTypeAdapter addItemViewDelegate(ItemViewDelegate<T> itemViewDelegate) {
         itemViewDelegateManager.addDelegate(itemViewDelegate);
         return this;
@@ -90,6 +97,7 @@ public class MultiItemTypeAdapter<T> extends RecyclerView.Adapter<ViewHolder> {
             }
         });
     }
+
     public interface OnItemClickListener {
         void onItemClick(View view, RecyclerView.ViewHolder holder, int position);
 
